@@ -8,6 +8,6 @@ export default async function api() {
     return res.data;
   } catch (error) {
     console.log("Error fetching data: " + error.message);
-    throw error; // Propagate the error to be handled by the caller
   }
 }
+

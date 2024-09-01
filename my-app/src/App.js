@@ -15,6 +15,7 @@ function App() {
         setData(result);
       } catch (err) {
         setError(err.message);
+        console.log(err.message);
       } finally {
         setLoading(false);
       }
