@@ -30,9 +30,7 @@ function App() {
         <div>Loading...</div>
       ) : error ? (
         <div>Error: {error}</div>
-      ) : data.length === 0 ? (
-        <div>No data available</div>
-      ) : (
+      ) :(
           <CardPart data={data} />
         )}
       
