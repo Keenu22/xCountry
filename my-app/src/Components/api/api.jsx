@@ -7,7 +7,7 @@ export default async function api() {
     console.log(res.data);
     return res.data;
   } catch (error) {
-    console.log("Error fetching data: " + error.message);
+    console.error("Error fetching data: " + error.message);
   }
 }
 
