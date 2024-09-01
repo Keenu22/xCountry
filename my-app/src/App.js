@@ -12,18 +12,20 @@ function App() {
     const fetchData = async () => {
       try {
         const result = await api();
-        setData(result);
+        if (Array.isArray(result) && result.length > 0) {
+          setData(result);
+        } else {
+          throw new Error('No data found');
+        }
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'An unexpected error occurred');
         console.error(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
-
   return (
     <>
       {loading ? (
