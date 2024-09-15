@@ -1,35 +1,46 @@
-import { Card, CardActionArea, CardContent, CardMedia, Grid2, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import './CardPart.css';
 
 export default function CardPart({ data }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); //300ms debounce delay
+    // Clean up the timeout if searchTerm changes within the 300ms delay
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+  const filteredData = data.filter(item =>
+    item.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
   return (
-    <Grid2 container sx={{width:'100%'}}> 
-      {data.map((item, index) => (
-        <Grid2 key={index} item> 
-          <Card sx={{ width: '50%', height: '90%' }}>
-            <CardActionArea>
-              <CardMedia 
-                component="img"
-                image={item.flag}
-                alt={item.name} 
-                sx={{
-                  width: '70%',
-                  height: 'auto',
-                  mx: 'auto', // Horizontally center the image
-                  display: 'block', // Remove any inline block spacing issues
-                  paddingX: '16px',
-                  paddingY:'16px' // Adjust the padding as needed
-                }}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
-                  {item.name}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid2>
-      ))}
-    </Grid2>
+    <>
+      <input
+        className="search"
+        type="text"
+        placeholder="Search for countries"
+        aria-label="Search for countries"
+        value={searchTerm}//two-way-binding
+        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm as the user types
+      />
+      <div className="container">
+        {filteredData.map((item) => (
+          <div key={item.name} className="countryCard">
+            <div className="card">
+              <div className="imageWrapper">
+                <img src={item.flag} alt={`Flag of ${item.name}`} />
+              </div>
+              <div className="content">
+                <h6>{item.name}</h6>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
