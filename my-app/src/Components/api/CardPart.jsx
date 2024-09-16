@@ -8,15 +8,18 @@ export default function CardPart({ data }) {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300); //300ms debounce delay
+    }, 300); // 300ms debounce delay
     // Clean up the timeout if searchTerm changes within the 300ms delay
     return () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+
+  // Filter data to only show exact matches
   const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    item.name.toLowerCase() === debouncedSearchTerm.toLowerCase()
   );
+
   return (
     <>
       <input
@@ -24,7 +27,7 @@ export default function CardPart({ data }) {
         type="text"
         placeholder="Search for countries"
         aria-label="Search for countries"
-        value={searchTerm}//two-way-binding
+        value={searchTerm} // two-way binding
         onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm as the user types
       />
       <div className="container">
