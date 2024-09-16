@@ -7,18 +7,20 @@ export default function CardPart({ data }) {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
+      setDebouncedSearchTerm(searchTerm.trim());
     }, 300); // 300ms debounce delay
-    // Clean up the timeout if searchTerm changes within the 300ms delay
+
     return () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
 
-  // Filter data to only show exact matches
-  const filteredData = data.filter(item =>
-    item.name.toLowerCase() === debouncedSearchTerm.toLowerCase()
-  );
+  // Filter data to match countries whose names contain the search term (case-insensitive)
+  const filteredData = debouncedSearchTerm
+    ? data.filter(item =>
+        item.name.trim().toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      )
+    : data;
 
   return (
     <>
@@ -27,22 +29,26 @@ export default function CardPart({ data }) {
         type="text"
         placeholder="Search for countries"
         aria-label="Search for countries"
-        value={searchTerm} // two-way binding
-        onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm as the user types
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
       <div className="container">
-        {filteredData.map((item) => (
-          <div key={item.name} className="countryCard">
-            <div className="card">
-              <div className="imageWrapper">
-                <img src={item.flag} alt={`Flag of ${item.name}`} />
-              </div>
-              <div className="content">
-                <h6>{item.name}</h6>
+        {filteredData.length > 0 ? (
+          filteredData.map((item, index) => (
+            <div key={`${item.name}-${index}`} className="countryCard">
+              <div className="card">
+                <div className="imageWrapper">
+                  <img src={item.flag} alt={`Flag of ${item.name}`} />
+                </div>
+                <div className="content">
+                  <h6>{item.name}</h6>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No countries found.</p>
+        )}
       </div>
     </>
   );

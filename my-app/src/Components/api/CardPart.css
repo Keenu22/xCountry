@@ -1,17 +1,26 @@
-.search{
+.search {
   margin-left: 30vw;
-  width:450px;
+  width: 450px;
 }
+
 .container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  /* Center cards horizontally */
+  gap: 16px;
+  /* Add space between cards */
   width: 100%;
+  box-sizing: border-box;
 }
 
 .countryCard {
   flex: 1 1 calc(100% / 7);
   /* Each card will take up 1/7th of the width */
-  height: 90%;
+  max-width: 300px;
+  /* Maximum width to ensure consistent card size */
+  height: 300px;
+  /* Fixed height for consistency */
   padding: 16px;
   box-sizing: border-box;
 }
@@ -22,6 +31,10 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Ensure consistent card height */
 }
 
 .countryCard .imageWrapper {
@@ -31,7 +44,8 @@
 }
 
 .countryCard img {
-  width: 70%;
+  max-width: 100%;
+  /* Ensure image fits within the card */
   height: auto;
   display: block;
 }
@@ -41,5 +55,5 @@
 }
 
 .countryCard h6 {
-  margin: 0 0 8px;
+  margin: 0;
 }
