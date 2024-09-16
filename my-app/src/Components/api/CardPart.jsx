@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce'; // Ensure you have this package installed
 import './CardPart.css';
-
-export default function CardPart({ data }) {
+const CardPart = ({ data }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 300); // Set to 300ms
 
+  // Handle search term changes with debounce
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm.trim());
-    }, 5000); // 300ms debounce delay
+    // No additional effect needed if using useDebounce
+  }, [debouncedSearchTerm]);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
-
-  // Filter data to match countries whose names contain the search term (case-insensitive)
+  // Filter data based on debounced search term
   const filteredData = debouncedSearchTerm
     ? data.filter(item =>
         item.name.trim().toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -25,31 +20,32 @@ export default function CardPart({ data }) {
   return (
     <>
       <input
-        className="search"
+       className='search'
         type="text"
-        placeholder="Search for countries"
-        aria-label="Search for countries"
+        placeholder="Search countries..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <div className="container">
-        {filteredData.length > 0 ? (
-          filteredData.map((item, index) => (
-            <div key={`${item.name}-${index}`} className="countryCard">
-              <div className="card">
-                <div className="imageWrapper">
-                  <img src={item.flag} alt={`Flag of ${item.name}`} />
-                </div>
-                <div className="content">
-                  <h6>{item.name}</h6>
-                </div>
+       <div className='container'>
+      {filteredData.length > 0 ? (
+        filteredData.map((item, index) => (
+          <div key={`${item.name}-${index}`} className="countryCard">
+            <div className="card">
+              <div className="imageWrapper">
+                <img src={item.flag} alt={`Flag of ${item.name}`} />
+              </div>
+              <div className="content">
+                <h6>{item.name}</h6>
               </div>
             </div>
-          ))
-        ) : (
-          <p>No countries found.</p>
-        )}
-      </div>
+          </div>
+        ))
+      ) : (
+        <p>No countries found.</p>
+      )}
+    </div>
     </>
   );
-}
+};
+
+export default CardPart;
