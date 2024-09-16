@@ -8,7 +8,7 @@ export default function CardPart({ data }) {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm.trim());
-    }, 300); // 300ms debounce delay
+    }, 5000); // 300ms debounce delay
 
     return () => {
       clearTimeout(handler);
